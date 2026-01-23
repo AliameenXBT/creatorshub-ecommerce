@@ -11,7 +11,10 @@ import ProductGrid from "@/components/product/Productgrid";
 import ProductSkeleton from "@/components/product/ProductSkeleton";
 import { useSettings } from "@/context/SettingsContext";
 
-export default function ProductsPage() {
+import { Suspense } from "react";
+import { Loader2 } from "lucide-react";
+
+function ProductsContent() {
   const searchParams = useSearchParams();
   const { settings } = useSettings();
   const [products, setProducts] = useState<Product[]>([]);
@@ -206,5 +209,19 @@ export default function ProductsPage() {
         )}
       </div>
     </main>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen pt-32 flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-zinc-500" />
+        </div>
+      }
+    >
+      <ProductsContent />
+    </Suspense>
   );
 }

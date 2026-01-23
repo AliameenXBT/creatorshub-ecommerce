@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle, ArrowRight, Printer, Share2, Eye, X } from "lucide-react";
+import {
+  CheckCircle,
+  ArrowRight,
+  Printer,
+  Share2,
+  Eye,
+  X,
+  Loader2,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,7 +18,9 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
 
-// Interface defining the structure of the order data from backend
+import { Suspense } from "react";
+
+// ... (keep interfaces)
 interface OrderItem {
   _id?: string;
   name: string;
@@ -29,7 +39,7 @@ interface OrderData {
   createdAt: string;
 }
 
-export default function OrderSuccessPage() {
+function OrderSuccessContent() {
   // Get the order ID from the URL query parameters
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
@@ -122,7 +132,6 @@ export default function OrderSuccessPage() {
         </p>
       </div>
 
-      {/* Action Buttons */}
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 print:hidden">
         {isAdminView ? (
@@ -299,5 +308,19 @@ export default function OrderSuccessPage() {
         )}
       </AnimatePresence>
     </main>
+  );
+}
+
+export default function OrderSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-zinc-500" />
+        </div>
+      }
+    >
+      <OrderSuccessContent />
+    </Suspense>
   );
 }

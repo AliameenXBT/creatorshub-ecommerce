@@ -11,6 +11,9 @@ import { toast } from "react-hot-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
+import { Suspense } from "react";
+
+// ... (schema and types)
 const verifyEmailSchema = z.object({
   code: z
     .string()
@@ -20,7 +23,7 @@ const verifyEmailSchema = z.object({
 
 type VerifyEmailFormData = z.infer<typeof verifyEmailSchema>;
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login: authLogin } = useAuth();
@@ -190,5 +193,19 @@ export default function VerifyEmailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-zinc-500" />
+        </div>
+      }
+    >
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
