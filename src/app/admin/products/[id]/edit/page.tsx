@@ -36,7 +36,7 @@ export default function EditProductPage() {
     setValue,
     reset,
     formState: { errors },
-  } = useForm<ProductFormData>({
+  } = useForm({
     resolver: zodResolver(productSchema),
   });
 
@@ -72,7 +72,7 @@ export default function EditProductPage() {
     }
   }, [params.id, router, reset]);
 
-  const onSubmit = async (data: ProductFormData) => {
+  const onSubmit = async (data: any) => {
     setIsLoading(true);
     if (!user?.token) {
       toast.error("You must be logged in to update a product.");

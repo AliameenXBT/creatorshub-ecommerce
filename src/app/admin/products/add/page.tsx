@@ -37,11 +37,11 @@ export default function AddProductPage() {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<ProductFormData>({
+  } = useForm({
     resolver: zodResolver(productSchema),
   });
 
-  const onSubmit = async (data: ProductFormData) => {
+  const onSubmit = async (data: any) => {
     setIsLoading(true);
     if (user?.token) {
       try {
