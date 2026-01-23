@@ -26,7 +26,7 @@ type ProductFormData = z.infer<typeof productSchema>;
 export default function EditProductPage() {
   const router = useRouter();
   const params = useParams();
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
 
@@ -74,14 +74,14 @@ export default function EditProductPage() {
 
   const onSubmit = async (data: ProductFormData) => {
     setIsLoading(true);
-    if (!token) {
+    if (!user?.token) {
       toast.error("You must be logged in to update a product.");
       setIsLoading(false);
       return;
     }
     try {
       const productId = params.id as string;
-      await api.updateProduct(productId, data, token);
+      await api.updateProduct(productId, data, user.token);
       toast.success("Product updated successfully!");
       router.push("/admin/products");
     } catch (error) {
